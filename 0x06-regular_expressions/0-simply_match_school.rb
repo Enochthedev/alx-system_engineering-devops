@@ -1,2 +1,11 @@
 #!/usr/bin/env ruby
-puts ARGV[0].scan(/School/).join
+
+regex = /School/
+input = ARGV[0]
+
+matches = input.scan(regex)
+
+if !matches.empty?
+  puts matches.join('')
+end
+
