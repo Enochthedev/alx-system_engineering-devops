@@ -1,2 +1,4 @@
 #!/usr/bin/env ruby
-puts ARGV[0].scan(/[A-Z]/).join
+input_str = ARGV[0]
+matches = input_str.scan(/[A-Z]+/)
+puts matches.join('')
