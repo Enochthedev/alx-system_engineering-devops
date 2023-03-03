@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-# Change localhost IP
-sed -i 's/127\.0\.0\.1/127.0.0.2/g' /etc/hosts
-# Change facebook.com IP
-sed -i 's/facebook\.com/8.8.8.8/g' /etc/hosts
-# Restart networking service
-systemctl restart networking.service
