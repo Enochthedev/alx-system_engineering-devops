@@ -1,4 +1,24 @@
-#!/usr/bin/env bash
-# Creates RSA key pair
+#!/bin/bash
 
-ssh-keygen -b 4096 -f school -t rsa -N betty
+# Name of the created private key
+KEY_NAME="school"
+
+# Number of bits in the created key
+BITS="4096"
+
+# Passphrase to protect the created key
+PASSPHRASE="betty"
+
+# Generate the key pair
+ssh-keygen -t rsa -b $BITS -C "$KEY_NAME" -f $KEY_NAME -N "$PASSPHRASE"
+
+# Print the fingerprint and randomart image
+echo "The key fingerprint is:"
+ssh-keygen -lf $KEY_NAME
+
+echo "The key's randomart image is:"
+ssh-keygen -lvf $KEY_NAME
+
+# Print the created files
+echo "The following files have been created:"
+ls $KEY_NAME*
