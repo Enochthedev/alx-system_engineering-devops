@@ -14,11 +14,11 @@ ssh-keygen -t rsa -b $BITS -C "$KEY_NAME" -f $KEY_NAME -N "$PASSPHRASE"
 
 # Print the fingerprint and randomart image
 echo "The key fingerprint is:"
-ssh-keygen -lf $KEY_NAME
+ssh-keygen -lf $KEY_NAME | awk '{print $2}'
 
 echo "The key's randomart image is:"
-ssh-keygen -lvf $KEY_NAME
+ssh-keygen -lvf $KEY_NAME | awk '{if(NR>1)print}'
 
 # Print the created files
-echo "The following files have been created:"
-ls $KEY_NAME*
+echo "$KEY_NAME"
+echo "$KEY_NAME.pub"
