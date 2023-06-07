@@ -3,17 +3,15 @@
 returns the number of subscribers"""
 import requests
 
+
 def number_of_subscribers(subreddit):
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {"User-Agent": "Mozilla/5.0"}  # Set a custom User-Agent to avoid errors
-
-    try:
-        response = requests.get(url, headers=headers, timeout=5)  # Set a timeout of 5 seconds
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-
-        data = response.json()
-        subscribers = data["data"]["subscribers"]
-        return subscribers
-    except (requests.RequestException, KeyError):
+    """returns the number of subscribers"""
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    headers = {
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
+    }
+    response = requests.get(url, headers=headers, allow_redirects=False)
+    if response.status_code == 404:
         return 0
-
+    results = response.json().get("data")
+    return results.get("subscribers")
