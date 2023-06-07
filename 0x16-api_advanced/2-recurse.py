@@ -4,29 +4,30 @@ API and returns a list containing the titles of
 all hot articles for a given subreddit."""
 import requests
 
-def recurse(subreddit, hot_list=None, after=None):
-    if hot_list is None:
-        hot_list = []
-        
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
-    headers = {"User-Agent": "Mozilla/5.0"}  # Set a custom User-Agent to avoid errors
-    params = {"after": after} if after else None
 
-    try:
-        response = requests.get(url, headers=headers, params=params, timeout=5)  # Set a timeout of 5 seconds
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-
-        data = response.json()
-        posts = data["data"]["children"]
-        after = data["data"]["after"]
-        
-        for post in posts:
-            title = post["data"]["title"]
-            hot_list.append(title)
-
-        if after:
-            return recurse(subreddit, hot_list, after=after)
-        else:
-            return hot_list
-    except (requests.RequestException, KeyError):
+def recurse(subreddit, hot_list=[], after="", count=0):
+    """returns a list containing the titles
+    of all hot articles for a given subreddit"""
+    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
+    headers = {
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
+    }
+    params = {
+        "after": after,
+        "count": count,
+        "limit": 100
+    }
+    response = requests.get(url, headers=headers, params=params,
+                            allow_redirects=False)
+    if response.status_code == 404:
         return None
+
+    results = response.json().get("data")
+    after = results.get("after")
+    count += results.get("dist")
+    for c in results.get("children"):
+        hot_list.append(c.get("data").get("title"))
+
+    if after is not None:
+        return recurse(subreddit, hot_list, after, count)
+    return hot_list
